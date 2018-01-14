@@ -1,0 +1,20 @@
+/* For the home page link */
+a:hover.no-underline{text-decoration: none}
+
+/* For blog list i.e. index.html */
+ul.no-bullets{list-style: none}
+
+/* Profile link icons for the About page */
+.profile-links img{
+  height: 20pt;
+  margin-bottom: 16pt;
+}
+.profile-links a:hover{text-decoration: none}
+
+/* Set jumbotron image (located on Home page) */
+.jumbotron {
+  background-image: url("/theme/images/jake_the_dog.jpg");
+  background-size: cover;
+  width: 706px;
+  height: 441.25px;
+}
