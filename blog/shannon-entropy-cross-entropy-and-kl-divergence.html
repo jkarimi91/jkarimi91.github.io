@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-55018084-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-55018084-2');
+</script>
+  <title>Shannon Entropy, Cross Entropy and KL-Divergence</title>
+
+  <!-- Latest compiled and minified Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+
+  <!-- Custom styles for this template  -->
+  <link rel="stylesheet" type="text/css" href="/theme/css/narrow-jumbotron.css">
+  <link rel="stylesheet" type="text/css" href="/theme/css/custom.css">
+</head>
+
+<body>
+
+  <div class="container">
+<header class="header clearfix">
+  <nav>
+    <ul class="nav float-right">
+      <li class="nav-item">
+        <a class="nav-link" href=/blog>Blog</a>
+      </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+    </ul>
+  </nav>
+  <h3>
+    <a class="text-muted no-underline" href="/">Jay Karimi</a>
+  </h3>
+</header>    <main role="main" class="mb-3">
+<div class="row">
+  <div class="col-md-12">
+    <h1>Shannon Entropy, Cross Entropy and KL-Divergence</h1>
+    <label>Posted on <strong>Jul 04 2018</strong></label>
+  <p>Imagine that there are two entities, one that sends and one that receives messages. Furthermore, imagine that the messages sent by the sender informs the receiver about the occurrence of an event.</p>
+<p><img alt="Sender/Receiver image" src="images/sender_receiver.png"></p>
+<p>We can calculate how much information is transferred from the sender to the receiver, via a message, by computing how surprising the receiver finds the occurrence of the event described in the message,</p>
+<div class="math">$$ S(p) = \log_2 \left(\frac{1}{p}\right) $$</div>
+<p><span class="math">\(S(p)\)</span> is known as the <strong>surprisal</strong> where <span class="math">\(p\)</span> is the probability the receiver associates with the event occurring. We can see that for surprising events, <span class="math">\(p\)</span> will be small such that <span class="math">\(S(p)\)</span> will be large and vice versa. Let's make this a more concrete with an example.</p>
+<p>Imagine that the head chef, of a restaurant, tells a server that they will be serving fish for dinner. In this example, we can view the chef as the sender, the server as the receiver and the message as the fact that the restaurant will be serving fish for dinner.</p>
+<p><img alt="Chef/Waiter image" src="images/chef_waiter.png"></p>
+<p>If the server already knew that fish was going to be on the menu, i.e. <span class="math">\(p=1\)</span>, then there will be no surprise and, therefore, no information transferred,</p>
+<div class="math">$$ S(p_{fish}=1) = \log_2 \left(1\right) = 0 \text{ bits}$$</div>
+<p>But what if the server did not know that they will serving fish for dinner? Perhaps, going into the conversation, the server figured that there was a 75% chance of serving fish, 10% chance of serving chicken and a 15% chance of serving tofu. In this case, the information transferred will be,</p>
+<div class="math">$$ S(p_{fish}=0.75) = \log_2 \left(\frac{1}{0.75}\right) = 0.415 \text{ bits} $$</div>
+<p>Let's go one step further and imagine that the server hasn't spoken to the chef yet. While we can't compute the amount of information transferred in the conversation, since it hasn't happened yet, we can compute the expected amount of information transferred aka the <strong>Shannon entropy</strong>,</p>
+<div class="math">$$ \mathbb{E}[I(P)] = H(P) = \sum_{p \in P} pS(p) = 1.05 \text{ bits} $$</div>
+<p>where <span class="math">\(P=\{p_{fish}, p_{chicken}, p_{tofu}\}\)</span> i.e. <span class="math">\(P\)</span> is the set containing the probabilities associated with each item being served for dinner.</p>
+<p>At this point, we have looked at how much information a message transfers but we have not looked at how much information is used to encode the message i.e. the message size. To illustrate this difference, let's assume the chef decides to tell the server that what will be served for dinner by repeating it 5 times,</p>
+<div class="math">$$ message = \text{"fishfishfishfishfish"} $$</div>
+<p>With this encoding scheme, the chef is still transferring <span class="math">\(S(p_{fish})=0.415 \text{ bits}\)</span> of information but using 5 times more text than a scheme that doesn't have the repetition.</p>
+<p>In general, we can compute the expected message size, known as the <strong>cross entropy</strong>, as follows,</p>
+<div class="math">$$ H(P, Q) = \sum_{i}^N p_i S(q_i) $$</div>
+<p>where the probability of the <span class="math">\(i^{th}\)</span> event occurring is given by <span class="math">\(p_i\)</span> while the probability of its corresponding encoded sequence occurring is given by <span class="math">\(q_i\)</span>.
+For example, if the chef decides to use a 2 bit encoding scheme then the messages could be encoded as follows,</p>
+<p><img alt="Two bit encoding image" src="images/two_bit.png"></p>
+<p>This encoding scheme implicitly implies that each sequence has an equal chance of occurring. Since there are <span class="math">\(2^2\)</span> possible sequences, there is a <span class="math">\(\frac{1}{2^2} = 25\%\)</span> chance of any single sequence occurring i.e. <span class="math">\(q_i = 25\%\)</span>. As a result,</p>
+<div class="math">$$ H(P, Q) = 0.75S(0.25) + 0.15S(0.25) + 0.1S(0.25) $$</div>
+<div class="math">$$ = S(0.25) = 2 \text{ bits} $$</div>
+<p>Notice that the message used more information than it transferred. The difference between how much information is encoded and how much is transferred is known as the <strong>KL-Divergence</strong>,</p>
+<div class="math">$$ D_{KL}(P || Q) = H(P, Q) - H(P) = 2 \text{ bits} - 1.05 \text{ bits} = 0.95 \text{ bits} $$</div>
+<p>An ideal encoding scheme will have a <span class="math">\(D_{KL}(P || Q) = 0 \text{ bits}\)</span> i.e. it will encode as much information as it transfers. To create an ideal encoding scheme, we can see that we would need <span class="math">\(q_i = p_i\)</span> for every <span class="math">\(i\)</span>. So in some sense, <span class="math">\(D_{KL}(P || Q)\)</span> actually measures how similar two probability distributions are; the more similar <span class="math">\(P\)</span> and <span class="math">\(Q\)</span> are, the smaller <span class="math">\(D_{KL}(P || Q)\)</span> is.</p>
+<h2>Resources</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ErfnhcEV1O8">A Short Introduction to Entropy, Cross-Entropy and KL-Divergence</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)">Entropy(Information Theory)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Self-information">Self-information</a></li>
+</ul>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+  </div>
+</div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2018 Jay Karimi</p>
+    </footer>
+
+  </div> <!-- /container -->
+</body>
+</html>
