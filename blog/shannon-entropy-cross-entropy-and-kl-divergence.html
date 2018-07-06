@@ -50,12 +50,12 @@
     <h1>Shannon Entropy, Cross Entropy and KL-Divergence</h1>
     <label>Posted on <strong>Jul 04 2018</strong></label>
   <p>Imagine that there are two entities, one that sends and one that receives messages. Furthermore, imagine that the messages sent by the sender informs the receiver about the occurrence of an event.</p>
-<p><img alt="Sender/Receiver image" src="images/sender_receiver.png"></p>
+<p><img alt="Sender/Receiver image" src="../images/sender_receiver.png"></p>
 <p>We can calculate how much information is transferred from the sender to the receiver, via a message, by computing how surprising the receiver finds the occurrence of the event described in the message,</p>
 <div class="math">$$ S(p) = \log_2 \left(\frac{1}{p}\right) $$</div>
 <p><span class="math">\(S(p)\)</span> is known as the <strong>surprisal</strong> where <span class="math">\(p\)</span> is the probability the receiver associates with the event occurring. We can see that for surprising events, <span class="math">\(p\)</span> will be small such that <span class="math">\(S(p)\)</span> will be large and vice versa. Let's make this a more concrete with an example.</p>
 <p>Imagine that the head chef, of a restaurant, tells a server that they will be serving fish for dinner. In this example, we can view the chef as the sender, the server as the receiver and the message as the fact that the restaurant will be serving fish for dinner.</p>
-<p><img alt="Chef/Waiter image" src="images/chef_waiter.png"></p>
+<p><img alt="Chef/Waiter image" src="../images/chef_waiter.png"></p>
 <p>If the server already knew that fish was going to be on the menu, i.e. <span class="math">\(p=1\)</span>, then there will be no surprise and, therefore, no information transferred,</p>
 <div class="math">$$ S(p_{fish}=1) = \log_2 \left(1\right) = 0 \text{ bits}$$</div>
 <p>But what if the server did not know that they will serving fish for dinner? Perhaps, going into the conversation, the server figured that there was a 75% chance of serving fish, 10% chance of serving chicken and a 15% chance of serving tofu. In this case, the information transferred will be,</p>
@@ -70,7 +70,7 @@
 <div class="math">$$ H(P, Q) = \sum_{i}^N p_i S(q_i) $$</div>
 <p>where the probability of the <span class="math">\(i^{th}\)</span> event occurring is given by <span class="math">\(p_i\)</span> while the probability of its corresponding encoded sequence occurring is given by <span class="math">\(q_i\)</span>.
 For example, if the chef decides to use a 2 bit encoding scheme then the messages could be encoded as follows,</p>
-<p><img alt="Two bit encoding image" src="images/two_bit.png"></p>
+<p><img alt="Two bit encoding image" src="../images/two_bit.png"></p>
 <p>This encoding scheme implicitly implies that each sequence has an equal chance of occurring. Since there are <span class="math">\(2^2\)</span> possible sequences, there is a <span class="math">\(\frac{1}{2^2} = 25\%\)</span> chance of any single sequence occurring i.e. <span class="math">\(q_i = 25\%\)</span>. As a result,</p>
 <div class="math">$$ H(P, Q) = 0.75S(0.25) + 0.15S(0.25) + 0.1S(0.25) $$</div>
 <div class="math">$$ = S(0.25) = 2 \text{ bits} $$</div>
